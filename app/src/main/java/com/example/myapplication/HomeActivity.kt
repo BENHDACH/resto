@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -22,17 +23,21 @@ class HomeActivity : AppCompatActivity() {
 
     private fun buttonsListener() {
         binding.starterButton.setOnClickListener{
-            Log.d("button", "Click sur button entree")
-            Toast.makeText(this, "Entree", Toast.LENGTH_LONG).show()
+            showCategory(Category.STARTER)
 
         }
         binding.mainButton.setOnClickListener{
-            Log.d("button", "Click sur button plats")
-            Toast.makeText(this, "Plats", Toast.LENGTH_LONG).show()
+            //Log.d("button", "Click sur button plats")
+           // Toast.makeText(this, "Plats", Toast.LENGTH_LONG).show()
+            showCategory(Category.MAIN)
         }
         binding.finishButton.setOnClickListener{
-            Log.d("button", "Click sur button dessert")
-            Toast.makeText(this, "Dessert", Toast.LENGTH_LONG).show()
+            showCategory(Category.DESSERT)
         }
+    }
+    private fun showCategory(category: Category){
+        val intent = Intent(this, PlatActivity::class.java)
+        intent.putExtra(PlatActivity.extraKey, category)
+        startActivity(intent)
     }
 }
