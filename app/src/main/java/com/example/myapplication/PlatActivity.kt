@@ -1,10 +1,19 @@
 package com.example.myapplication
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request.Method
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.example.myapplication.databinding.ActivityPlatBinding
+import com.example.myapplication.network.MenuResult
+import com.example.myapplication.network.NetworkConstants
+import com.google.gson.GsonBuilder
+import org.json.JSONObject
 
 enum class Category { STARTER , MAIN , DESSERT }
 class PlatActivity : AppCompatActivity() {
@@ -14,19 +23,55 @@ class PlatActivity : AppCompatActivity() {
     }
 
     lateinit var binding: ActivityPlatBinding
+    lateinit var currentCategory: Category
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlatBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding.root)//charge le bon layout (celui ici), note: definir avec R va juste cherche le layout pas activer le binding avec lui (root fait les deux)
 
-        val category = intent.getSerializableExtra(extraKey) as? Category
+        val category = intent.getSerializableExtra(extraKey) as? Category //C'est un category optionnel !
 
-        supportActionBar?.title = categoryName(category ?: Category.STARTER) //Si cat est null alors Starter par def
+        currentCategory = category ?: Category.STARTER
+
+        supportActionBar?.title = categoryName() //Si cat est null alors Starter par def
 
 
-
+        makeRequest()
        // Toast.makeText(this,intent.getStringExtra("NameMain"), Toast.LENGTH_LONG).show()
+    }
+
+    private fun makeRequest(){
+        val queue = Volley.newRequestQueue(this)
+        val params = JSONObject()
+        params.put(NetworkConstants.idShopKey, 1)
+        val request = JsonObjectRequest(
+            Method.POST,
+            NetworkConstants.url,
+            params,
+            { result ->
+                Log.d("request", result.toString(2))
+            },
+            { error ->
+                Log.e("request", error.toString())
+            }
+        )
+        queue.add(request)
+        //showData()
+    }
+
+    private fun parseData(data: String){
+        val result = GsonBuilder().create().fromJson(data, MenuResult::class.java)
+        val category = result.data.first { it.name == categoryFilterKey() }
+        showDatas(category)
+    }
+
+    private fun showDatas(category: com.example.myapplication.network.Category){
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = CustomerAdapter(listOf("1","2","3")) {
+            val intent = Intent(this, DetailActivity::class.java)
+            startActivity(intent)
+        } // acolade à la fin pareil que dans la parenthèse car une seul valeur de toute façon...
     }
 
     override fun onStart() {
@@ -35,12 +80,21 @@ class PlatActivity : AppCompatActivity() {
 
     }
 
-    private fun categoryName(category : Category): String{
-        return when(category){
+    private fun categoryName(): String{
+        return when(currentCategory){
             Category.STARTER -> getString(R.string.starter)//On recupere le titre de nos bouton selon la category
             Category.MAIN -> getString(R.string.main)
             Category.DESSERT -> getString(R.string.finish)
         }
+    }
+
+    private fun categoryFilterKey():String{
+        return when(currentCategory) {
+            Category.STARTER -> "Entrees"
+            Category.MAIN -> "Plats"
+            Category.DESSERT -> "Desserts"
+        }
+
     }
 
     override fun onDestroy() {
