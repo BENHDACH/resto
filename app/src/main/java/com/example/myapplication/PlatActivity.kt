@@ -13,6 +13,7 @@ import com.example.myapplication.databinding.ActivityPlatBinding
 import com.example.myapplication.network.MenuResult
 import com.example.myapplication.network.NetworkConstants
 import com.google.gson.GsonBuilder
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
 
 enum class Category { STARTER , MAIN , DESSERT }
@@ -32,7 +33,7 @@ class PlatActivity : AppCompatActivity() {
 
         val category = intent.getSerializableExtra(extraKey) as? Category //C'est un category optionnel !
 
-        currentCategory = category ?: Category.STARTER
+        currentCategory = category ?: Category.STARTER //On donne une val par def
 
         supportActionBar?.title = categoryName() //Si cat est null alors Starter par def
 
@@ -51,6 +52,7 @@ class PlatActivity : AppCompatActivity() {
             params,
             { result ->
                 Log.d("request", result.toString(2))
+                parseData(result.toString())
             },
             { error ->
                 Log.e("request", error.toString())
@@ -66,9 +68,14 @@ class PlatActivity : AppCompatActivity() {
         showDatas(category)
     }
 
+
+
+
     private fun showDatas(category: com.example.myapplication.network.Category){
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = CustomerAdapter(listOf("1","2","3")) {
+        //val imageUrl = "https://images.bfmtv.com/UDAdpp33jU96JAWSB1v2R8KbfUg=/0x0:1196x1192/600x0/images/-458880.jpg"
+        //Picasso.get().load(imageUrl).into(binding.imageTest)
+        binding.recyclerView.adapter = CustomerAdapter(category.items) {
             val intent = Intent(this, DetailActivity::class.java)
             startActivity(intent)
         } // acolade à la fin pareil que dans la parenthèse car une seul valeur de toute façon...
@@ -90,7 +97,7 @@ class PlatActivity : AppCompatActivity() {
 
     private fun categoryFilterKey():String{
         return when(currentCategory) {
-            Category.STARTER -> "Entrees"
+            Category.STARTER -> "Entrées"
             Category.MAIN -> "Plats"
             Category.DESSERT -> "Desserts"
         }
