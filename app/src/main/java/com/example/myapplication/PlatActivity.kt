@@ -37,7 +37,6 @@ class PlatActivity : AppCompatActivity() {
 
         supportActionBar?.title = categoryName() //Si cat est null alors Starter par def
 
-
         makeRequest()
        // Toast.makeText(this,intent.getStringExtra("NameMain"), Toast.LENGTH_LONG).show()
     }
@@ -75,10 +74,21 @@ class PlatActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         //val imageUrl = "https://images.bfmtv.com/UDAdpp33jU96JAWSB1v2R8KbfUg=/0x0:1196x1192/600x0/images/-458880.jpg"
         //Picasso.get().load(imageUrl).into(binding.imageTest)
-        binding.recyclerView.adapter = CustomerAdapter(category.items) {
+        binding.recyclerView.adapter = CustomerAdapter(category.items) {nom,prix,image,ingre,plate,listImage ->
             val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("platNom", nom)
+            intent.putExtra("platPrix", prix)
+            intent.putExtra("platImage", plate.images.firstOrNull())
+            for(i in 1 .. ingre.size){
+                intent.putExtra("platIngre${i}","${ingre[i-1].ingredientN}")
+            }
+            for(i in 1..listImage.size){
+                intent.putExtra("platImage${i}","${listImage[i-1]}")
+            }
+            intent.putExtra("countIng",ingre.size)
+            intent.putExtra("countImg",listImage.size)
             startActivity(intent)
-        } // acolade à la fin pareil que dans la parenthèse car une seul valeur de toute façon...
+        }
     }
 
     override fun onStart() {

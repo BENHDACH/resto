@@ -2,8 +2,90 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
+    <TextView
+        android:id="@+id/titleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:text="TextView"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pager" />
+
+    <TextView
+        android:id="@+id/ingredientName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleName" />
+
+    <Button
+        android:id="@+id/priceTotal"
+        android:layout_width="97dp"
+        android:layout_height="56dp"
+        android:text="0"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
+
+    <Button
+        android:id="@+id/moinsButton"
+        android:layout_width="57dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginBottom="248dp"
+        android:text="-"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/plusButton"
+        android:layout_width="57dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="248dp"
+        android:text="+"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/plusButton"
+        app:layout_constraintHorizontal_bias="0.574"
+        app:layout_constraintStart_toEndOf="@+id/moinsButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.651" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="409dp"
+        android:layout_height="187dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
