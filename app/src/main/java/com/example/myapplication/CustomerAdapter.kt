@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.CellCustomBinding
+import com.example.myapplication.network.Ingredient
 import com.example.myapplication.network.Plate
 import com.squareup.picasso.Picasso
 
-class CustomerAdapter(val items: List<Plate>, val clickListener: (Plate) -> Unit) :RecyclerView.Adapter<CustomerAdapter.CellViewHolder>() {
+class CustomerAdapter(val items: List<Plate>, val clickListener: (String,String,String,List<Ingredient>, Plate,List<String>) -> Unit) :RecyclerView.Adapter<CustomerAdapter.CellViewHolder>() {
     class CellViewHolder(binding: CellCustomBinding): RecyclerView.ViewHolder(binding.root) {
         val textView: TextView = binding.textView2//Id du text dans cell_custom.xml pour (1,2,3 au début)
         val imageView = binding.imageView2
@@ -33,15 +34,19 @@ class CustomerAdapter(val items: List<Plate>, val clickListener: (Plate) -> Unit
         holder.priceTextView.text = plate.prices.first().price + " $"
         Picasso.get().load(getThumbnail(plate)).into(holder.imageView)
         holder.root.setOnClickListener {
-            Log.d("click", "click on ${position}")
-            clickListener(plate)
+            Log.e("click", "click on ${plate.images}")
+            clickListener(plate.name, plate.prices.first().price, plate.images.toString(), plate.ingredient, plate, plate.images)
         }
     }
+
+
     private fun getThumbnail(plate: Plate): String? {
         return if (plate.images.isNotEmpty() && plate.images.firstOrNull()?.isNotEmpty() == true){
             plate.images.firstOrNull()
         } else {
+            Log.e("LAm","Voici")
             null
         }
     }
+
 }
